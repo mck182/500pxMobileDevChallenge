@@ -4,6 +4,7 @@ QT += qml quick
 
 SOURCES += main.cpp \
     restwrapper.cpp \
+    photosmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -15,3 +16,5 @@ include(deployment.pri)
 
 HEADERS += \
     restwrapper.h \
+    photosmodel.h
+
