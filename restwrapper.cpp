@@ -23,6 +23,7 @@
 
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QUrlQuery>
 
 RestWrapper::RestWrapper(QObject *parent)
     : QObject(parent),
@@ -38,13 +39,14 @@ void RestWrapper::requestPhotos(const QString &feature, int page, int imageSize)
     QUrl requestUrl(m_baseUrl + "/photos");
     QUrlQuery requestDetails;
 
+    // Set the request details
     requestDetails.addQueryItem("consumer_key", m_consumerKey);
     requestDetails.addQueryItem("feature", feature);
-    requestDetails.addQueryItem("image_size", imageSize);
+    requestDetails.addQueryItem("image_size", QString::number(imageSize));
 
     // No need to set the page param if it's 0
     if (page > 0) {
-        requestDetails.addQueryItem("page", page);
+        requestDetails.addQueryItem("page", QString::number(page));
     }
 
     requestUrl.setQuery(requestDetails);
@@ -52,6 +54,7 @@ void RestWrapper::requestPhotos(const QString &feature, int page, int imageSize)
     QNetworkRequest photoRequest;
     photoRequest.setUrl(requestUrl);
 
+    // Send the request
     QNetworkReply *reply = m_networkManager->get(photoRequest);
     connect(reply, &QNetworkReply::finished, this, [=] {
         if (reply->error() == QNetworkReply::NoError) {

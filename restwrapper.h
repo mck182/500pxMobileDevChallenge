@@ -23,6 +23,8 @@
 #define RESTWRAPPER_H
 
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonDocument>
 
 class RestWrapper : public QObject
 {
@@ -33,6 +35,7 @@ public:
 
     /**
      * @brief Method that retrieves the photos from specified page
+     *
      * @param feature Which category ('feature') to retrieve, default is "fresh_today"
      * @param imageSize Which image sizes to retrieve, default is 3 (280px x 280px)
      * @param page Which page to retrieve photos from, default is first page
@@ -40,6 +43,11 @@ public:
     void requestPhotos(const QString &feature = QString("fresh_today"), int imageSize = 3, int page = 0);
 
 signals:
+    /**
+     * @brief Emitted when a non-error server response is retrieved
+     *
+     * @param jsonData The data the server sent
+     */
     void photosRetrieved(const QJsonDocument &jsonData);
 
     /**
