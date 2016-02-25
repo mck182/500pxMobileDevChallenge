@@ -66,5 +66,7 @@ void RestWrapper::requestPhotos(const QString &feature, int page, int imageSize)
             qWarning() << reply->errorString();
             Q_EMIT requestError(reply->error());
         }
+
+        reply->deleteLater();
     });
 }
