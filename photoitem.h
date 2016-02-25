@@ -19,30 +19,27 @@
  *
  */
 
-#ifndef PHOTOSMODEL_H
-#define PHOTOSMODEL_H
+#ifndef PHOTOITEM_H
+#define PHOTOITEM_H
 
-#include <QAbstractListModel>
-#include <QJsonDocument>
+#include <QObject>
+#include <QString>
 
-class RestWrapper;
-
-class PhotosModel : public QAbstractListModel
+class PhotoItem
 {
-    Q_OBJECT
+    Q_GADGET
+    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QString photoUrl READ photoUrl CONSTANT)
 
 public:
-    explicit PhotosModel(QObject *parent = 0);
+    PhotoItem(const QString &title, const QString &photoUrl);
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
-
-private Q_SLOTS:
-    void onPhotosRetrieved(const QJsonDocument &jsonData);
+    QString title() const;
+    QString photoUrl() const;
 
 private:
-    RestWrapper *m_restWrapper;
-    QList<PhotoItem> m_photos;
+    QString m_title;
+    QString m_photoUrl;
 };
 
-#endif // PHOTOSMODEL_H
+#endif // PHOTOITEM_H

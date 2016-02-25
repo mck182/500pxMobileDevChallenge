@@ -23,7 +23,7 @@
 #include "restwrapper.h"
 
 PhotosModel::PhotosModel(QObject *parent)
-    : QObject(parent),
+    : QAbstractListModel(parent),
       m_restWrapper(new RestWrapper(this))
 {
     connect(m_restWrapper, &RestWrapper::photosRetrieved, this, &PhotosModel::onPhotosRetrieved);
@@ -31,12 +31,26 @@ PhotosModel::PhotosModel(QObject *parent)
 
 QVariant PhotosModel::data(const QModelIndex &index, int role) const
 {
+    // Return empty for invalid index
+    if (!index.isValid()) {
+        return QVariant();
+    }
+
+    PhotoItem &photo = m_photos.at(index.row());
+
+    switch (role) {
+        case Qt::DisplayRole:
+            return photo.title();
+        case Qt::DecorationRole:
+            return photo.photoUrl();
+    }
+
     return QVariant();
 }
 
 int PhotosModel::rowCount(const QModelIndex &parent) const
 {
-    return 0;
+    return m_photos.size();
 }
 
 void PhotosModel::onPhotosRetrieved(const QJsonDocument &jsonData)
