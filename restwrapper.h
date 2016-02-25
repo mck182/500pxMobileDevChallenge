@@ -42,6 +42,11 @@ public:
 signals:
     void photosRetrieved(const QJsonDocument &jsonData);
 
+    /**
+     * @brief Emitted when there is an error while processing the request
+     */
+    void requestError(QNetworkReply::NetworkError error);
+
 public slots:
 private:
     QString m_consumerKey;

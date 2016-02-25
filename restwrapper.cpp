@@ -58,6 +58,10 @@ void RestWrapper::requestPhotos(const QString &feature, int page, int imageSize)
             // Parse the reply into JSON document and notify the model
             QJsonDocument jsonReply = QJsonDocument::fromJson(reply->readAll());
             Q_EMIT photosRetrieved(jsonReply);
+        } else {
+            // Print the error to console and emit the error type
+            qWarning() << reply->errorString();
+            Q_EMIT requestError(reply->error());
         }
     });
 }
