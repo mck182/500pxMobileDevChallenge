@@ -19,39 +19,25 @@
  *
  */
 
-#include "photoitem.h"
+#include "useritem.h"
 
-PhotoItem::PhotoItem(const QJsonObject &jsonData)
+UserItem::UserItem(const QJsonObject &jsonData)
 {
     m_jsonData = jsonData;
 }
 
-QString PhotoItem::name() const
+int UserItem::id() const
 {
-    return m_jsonData.value("name").toString();
+    return m_jsonData.value("id").toInt();
 }
 
-QString PhotoItem::imageUrl() const
+QString UserItem::fullname() const
 {
-    return m_jsonData.value("image_url").toString();
+    return m_jsonData.value("fullname").toString();
 }
 
-int PhotoItem::width() const
+QString UserItem::userpicUrl() const
 {
-    return m_jsonData.value("width").toInt();
+    return m_jsonData.value("userpic_url").toString();
 }
 
-int PhotoItem::height() const
-{
-    return m_jsonData.value("height").toInt();
-}
-
-int PhotoItem::userId() const
-{
-    return m_jsonData.value("user").toObject().value("id").toInt();
-}
-
-QSize PhotoItem::size() const
-{
-    return QSize(width(), height());
-}

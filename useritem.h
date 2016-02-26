@@ -19,39 +19,32 @@
  *
  */
 
-#include "photoitem.h"
+#ifndef USERITEM_H
+#define USERITEM_H
 
-PhotoItem::PhotoItem(const QJsonObject &jsonData)
-{
-    m_jsonData = jsonData;
-}
+#include <QObject>
+#include <QString>
+#include <QSize>
+#include <QJsonObject>
 
-QString PhotoItem::name() const
+class UserItem
 {
-    return m_jsonData.value("name").toString();
-}
+    Q_GADGET
+    Q_PROPERTY(int id READ id CONSTANT)
+    Q_PROPERTY(QString fullname READ fullname CONSTANT)
+    Q_PROPERTY(QString userpicUrl READ userpicUrl CONSTANT)
 
-QString PhotoItem::imageUrl() const
-{
-    return m_jsonData.value("image_url").toString();
-}
+public:
+    UserItem(const QJsonObject &jsonData);
 
-int PhotoItem::width() const
-{
-    return m_jsonData.value("width").toInt();
-}
+    UserItem() {}; // Empty ctor for QHash default value
 
-int PhotoItem::height() const
-{
-    return m_jsonData.value("height").toInt();
-}
+    int id() const;
+    QString fullname() const;
+    QString userpicUrl() const;
 
-int PhotoItem::userId() const
-{
-    return m_jsonData.value("user").toObject().value("id").toInt();
-}
+private:
+    QJsonObject m_jsonData;
+};
 
-QSize PhotoItem::size() const
-{
-    return QSize(width(), height());
-}
+#endif // USERITEM_H

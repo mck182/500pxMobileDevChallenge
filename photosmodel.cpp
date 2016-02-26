@@ -29,7 +29,7 @@
 PhotosModel::PhotosModel(QObject *parent)
     : QAbstractListModel(parent),
       m_restWrapper(new RestWrapper(this)),
-      m_currentPage(0),
+      m_currentPage(1),
       m_availablePages(0)
 {
     connect(m_restWrapper, &RestWrapper::photosRetrieved, this, &PhotosModel::onPhotosRetrieved);
@@ -46,6 +46,8 @@ QHash<int, QByteArray> PhotosModel::roleNames() const
     roles.insert(NameRole, "name");
     roles.insert(ImageUrlRole, "imageUrl");
     roles.insert(SizeRole, "size");
+    roles.insert(UserFullnameRole, "userFullname");
+    roles.insert(UserpicUrlRole, "userpicUrl");
 
     return roles;
 }
@@ -66,6 +68,16 @@ QVariant PhotosModel::data(const QModelIndex &index, int role) const
             return photo.imageUrl();
         case PhotosModel::SizeRole:
             return photo.size();
+
+        case PhotosModel::UserFullnameRole:
+        case PhotosModel::UserpicUrlRole:
+            const UserItem &userItem = m_users.value(photo.userId());
+
+            if (role == PhotosModel::UserFullnameRole) {
+                return userItem.fullname();
+            } else if (role == PhotosModel::UserpicUrlRole) {
+                return userItem.userpicUrl();
+            }
     }
 
     return QVariant();
@@ -101,9 +113,13 @@ void PhotosModel::onPhotosRetrieved(const QJsonDocument &jsonData)
 
         m_photoIds << photoId;
         photosToAdd << PhotoItem(photo.toObject());
+
+        const QJsonObject userInfo = photo.toObject().value("user").toObject();
+
+        m_users.insert(userInfo.value("id").toInt(), UserItem(userInfo));
     }
 
-    // Now append the newly retrieved photos to the existing collection
+    // Now append the newly retrieved deduplicated photos to the existing collection
     beginInsertRows(QModelIndex(), m_photos.size(), m_photos.size() + photosToAdd.size());
     m_photos << photosToAdd;
     endInsertRows();

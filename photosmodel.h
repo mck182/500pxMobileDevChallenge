@@ -26,6 +26,7 @@
 #include <QJsonDocument>
 
 #include "photoitem.h"
+#include "useritem.h"
 
 class RestWrapper;
 
@@ -39,7 +40,9 @@ public:
     enum ModelRoles {
         NameRole = Qt::UserRole,
         ImageUrlRole,
-        SizeRole
+        SizeRole,
+        UserFullnameRole,
+        UserpicUrlRole
     };
     Q_ENUM(ModelRoles)
 
@@ -89,6 +92,7 @@ private:
     RestWrapper *m_restWrapper;
     QList<PhotoItem> m_photos;
     QList<int> m_photoIds;
+    QHash<int, UserItem> m_users;
     uint m_availablePages;
     uint m_currentPage;
 };

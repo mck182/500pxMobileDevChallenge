@@ -32,6 +32,7 @@ class PhotoItem
     Q_GADGET
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString imageUrl READ imageUrl CONSTANT)
+    Q_PROPERTY(int userId READ userId CONSTANT)
 
 public:
     PhotoItem(const QJsonObject &jsonData);
@@ -40,6 +41,7 @@ public:
     QString imageUrl() const;
     int width() const;
     int height() const;
+    int userId() const;
 
     /// Convenience method to retrieve both width and height at once
     QSize size() const;

@@ -7,7 +7,8 @@ QT += qml quick
 SOURCES += main.cpp \
     restwrapper.cpp \
     photosmodel.cpp \
-    photoitem.cpp
+    photoitem.cpp \
+    useritem.cpp
 
 RESOURCES += qml.qrc
 
@@ -20,5 +21,6 @@ include(deployment.pri)
 HEADERS += \
     restwrapper.h \
     photosmodel.h \
-    photoitem.h
+    photoitem.h \
+    useritem.h
 
