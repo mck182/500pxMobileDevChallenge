@@ -9,6 +9,14 @@ ListView {
 
     model: PhotosModel
 
+    currentIndex: rootWindow.currentIndex
+
+    onCurrentIndexChanged: {
+        rootWindow.currentIndex = currentIndex;
+    }
+
+    highlightRangeMode: ListView.StrictlyEnforceRange
+
     delegate: Rectangle {
         id: detailsItem
         width: detailsView.width

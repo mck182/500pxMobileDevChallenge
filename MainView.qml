@@ -29,6 +29,17 @@ Flickable {
     contentHeight: photoGrid.height + (busyThrobber.visible ? busyThrobber.height : 0)
     flickableDirection: Flickable.VerticalFlick
 
+    Connections {
+        target: rootWindow
+        onCurrentIndexChanged: {
+            if (rootWindow.currentIndex == -1) {
+                return;
+            }
+
+            contentY = photoGrid.itemAt(rootWindow.currentIndex).y
+        }
+    }
+
     Repeater {
         id: photoGrid
 
