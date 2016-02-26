@@ -56,6 +56,10 @@ void RestWrapper::requestPhotos(uint page, uint imageSize, const QString &featur
 
     // Send the request
     QNetworkReply *reply = m_networkManager->get(photoRequest);
+
+    // Increment the active requests counter
+    addActiveRequest();
+
     connect(reply, &QNetworkReply::finished, this, [=] {
         if (reply->error() == QNetworkReply::NoError) {
             // Parse the reply into JSON document and notify the model
@@ -67,6 +71,35 @@ void RestWrapper::requestPhotos(uint page, uint imageSize, const QString &featur
             Q_EMIT requestError(reply->error());
         }
 
+        // Decrement the active requests counter
+        removeActiveRequest();
+
+        // Don't leak
         reply->deleteLater();
     });
+}
+
+bool RestWrapper::hasActiveRequest()
+{
+    return m_requestsRefCount > 0;
+}
+
+void RestWrapper::addActiveRequest()
+{
+    // If this is the first active request, emit active
+    if (m_requestsRefCount == 0) {
+        Q_EMIT requestActive(true);
+    }
+
+    m_requestsRefCount++;
+}
+
+void RestWrapper::removeActiveRequest()
+{
+    m_requestsRefCount--;
+
+    // No more active requests, emit active(false)
+    if (m_requestsRefCount == 0) {
+        Q_EMIT requestActive(false);
+    }
 }

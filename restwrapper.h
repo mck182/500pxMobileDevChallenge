@@ -42,6 +42,13 @@ public:
      */
     void requestPhotos(uint page = 1, uint imageSize = 30, const QString &feature = QString("fresh_today"));
 
+    /**
+     * @brief Indicates if there are any active network requests waiting for reply
+     *
+     * @return true if there is any ongoing request, false otherwise
+     */
+    bool hasActiveRequest();
+
 signals:
     /**
      * @brief Emitted when a non-error server response is retrieved
@@ -55,11 +62,22 @@ signals:
      */
     void requestError(QNetworkReply::NetworkError error);
 
-public slots:
+    /**
+     * @brief Signals whenever there is any active request and when
+     *        the last active one finishes
+     *
+     * @param active If true, there is currently an ongoing network request
+     */
+    void requestActive(bool active);
+
 private:
+    void addActiveRequest();
+    void removeActiveRequest();
+
     QString m_consumerKey;
     QString m_baseUrl;
     QNetworkAccessManager *m_networkManager;
+    uint m_requestsRefCount;
 };
 
 #endif // RESTWRAPPER_H

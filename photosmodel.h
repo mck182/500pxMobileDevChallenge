@@ -32,6 +32,7 @@ class RestWrapper;
 class PhotosModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(bool hasActiveRequest READ hasActiveRequest NOTIFY activeRequestChanged)
 
 public:
     enum ModelRoles {
@@ -55,6 +56,16 @@ public:
      * @param index Index of the photo
      */
     Q_INVOKABLE QSize sizeForIndex(int index) const;
+
+    /**
+     * @brief Indicates if there are any currently ongoing network requests
+     *
+     * @return true if any active requests is currently ongoing, false otherwise
+     */
+    bool hasActiveRequest() const;
+
+Q_SIGNALS:
+    void activeRequestChanged();
 
 private Q_SLOTS:
     void onPhotosRetrieved(const QJsonDocument &jsonData);

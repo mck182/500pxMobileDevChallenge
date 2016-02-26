@@ -33,6 +33,7 @@ PhotosModel::PhotosModel(QObject *parent)
       m_availablePages(0)
 {
     connect(m_restWrapper, &RestWrapper::photosRetrieved, this, &PhotosModel::onPhotosRetrieved);
+    connect(m_restWrapper, &RestWrapper::requestActive, this, &PhotosModel::activeRequestChanged);
     m_restWrapper->requestPhotos();
 }
 
@@ -134,3 +135,7 @@ QSize PhotosModel::sizeForIndex(int index) const
     return m_photos.at(index).size();
 }
 
+bool PhotosModel::hasActiveRequest() const
+{
+    return m_restWrapper->hasActiveRequest();
+}
