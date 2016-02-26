@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QSize>
 #include <QJsonObject>
 
 class PhotoItem
@@ -37,6 +38,11 @@ public:
 
     QString name() const;
     QString imageUrl() const;
+    int width() const;
+    int height() const;
+
+    /// Convenience method to retrieve both width and height at once
+    QSize size() const;
 
 private:
     QJsonObject m_jsonData;

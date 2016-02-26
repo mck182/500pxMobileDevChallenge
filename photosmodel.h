@@ -36,7 +36,8 @@ class PhotosModel : public QAbstractListModel
 public:
     enum ModelRoles {
         NameRole = Qt::UserRole,
-        ImageUrlRole
+        ImageUrlRole,
+        SizeRole
     };
     Q_ENUM(ModelRoles)
 

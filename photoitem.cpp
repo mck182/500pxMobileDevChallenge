@@ -35,3 +35,18 @@ QString PhotoItem::imageUrl() const
 {
     return m_jsonData.value("image_url").toString();
 }
+
+int PhotoItem::width() const
+{
+    return m_jsonData.value("width").toInt();
+}
+
+int PhotoItem::height() const
+{
+    return m_jsonData.value("height").toInt();
+}
+
+QSize PhotoItem::size() const
+{
+    return QSize(width(), height());
+}
