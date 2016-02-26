@@ -31,6 +31,7 @@ PhotosModel::PhotosModel(QObject *parent)
       m_restWrapper(new RestWrapper(this))
 {
     connect(m_restWrapper, &RestWrapper::photosRetrieved, this, &PhotosModel::onPhotosRetrieved);
+    m_restWrapper->requestPhotos();
 }
 
 QVariant PhotosModel::data(const QModelIndex &index, int role) const
