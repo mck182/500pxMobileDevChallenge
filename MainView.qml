@@ -168,7 +168,7 @@ Flickable {
         anchors.horizontalCenter: photoGrid.horizontalCenter
         width: 64
         height: 64
-        running: photoGrid.model.hasActiveRequests
+        running: photoGrid.model.hasActiveRequest
         visible: running // Hide it when not running
     }
 
