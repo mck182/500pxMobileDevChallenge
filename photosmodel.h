@@ -45,6 +45,8 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+    Q_INVOKABLE bool canFetchMore(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    Q_INVOKABLE void fetchMore(const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void onPhotosRetrieved(const QJsonDocument &jsonData);
@@ -52,6 +54,8 @@ private Q_SLOTS:
 private:
     RestWrapper *m_restWrapper;
     QList<PhotoItem> m_photos;
+    uint m_availablePages;
+    uint m_currentPage;
 };
 
 #endif // PHOTOSMODEL_H

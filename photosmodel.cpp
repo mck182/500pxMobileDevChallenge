@@ -28,7 +28,9 @@
 
 PhotosModel::PhotosModel(QObject *parent)
     : QAbstractListModel(parent),
-      m_restWrapper(new RestWrapper(this))
+      m_restWrapper(new RestWrapper(this)),
+      m_currentPage(0),
+      m_availablePages(0)
 {
     connect(m_restWrapper, &RestWrapper::photosRetrieved, this, &PhotosModel::onPhotosRetrieved);
     m_restWrapper->requestPhotos();
@@ -72,11 +74,37 @@ int PhotosModel::rowCount(const QModelIndex &parent) const
 void PhotosModel::onPhotosRetrieved(const QJsonDocument &jsonData)
 {
     QJsonObject topLevelObject = jsonData.object();
+
+    // Extract the paging info
+    m_currentPage = topLevelObject.value("current_page").toInt();
+    m_availablePages = topLevelObject.value("total_pages").toInt();
+
+    // Extract the photos array from the server data
     QJsonArray photosArray = topLevelObject.value("photos").toArray();
 
+    // Add each photo to the model
     beginInsertRows(QModelIndex(), m_photos.size(), m_photos.size() + photosArray.size());
     Q_FOREACH (const QJsonValue &photo, photosArray) {
         m_photos << PhotoItem(photo.toObject());
     }
     endInsertRows();
+}
+
+bool PhotosModel::canFetchMore(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+
+    // If we have pages left to browse, return true
+    if (m_currentPage < m_availablePages) {
+        return true;
+    }
+
+    return false;
+}
+
+void PhotosModel::fetchMore(const QModelIndex &parent)
+{
+    Q_UNUSED(parent);
+    // Request photos from the current+1 page
+    m_restWrapper->requestPhotos(++m_currentPage);
 }

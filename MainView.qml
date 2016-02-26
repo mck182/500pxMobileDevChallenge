@@ -51,4 +51,10 @@ GridView {
             }
         }
     }
+
+    onAtYEndChanged: {
+        if (model.canFetchMore()) {
+            model.fetchMore();
+        }
+    }
 }
