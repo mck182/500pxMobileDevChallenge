@@ -34,10 +34,17 @@ class PhotosModel : public QAbstractListModel
     Q_OBJECT
 
 public:
+    enum ModelRoles {
+        NameRole = Qt::UserRole,
+        ImageUrlRole
+    };
+    Q_ENUM(ModelRoles)
+
     explicit PhotosModel(QObject *parent = 0);
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void onPhotosRetrieved(const QJsonDocument &jsonData);

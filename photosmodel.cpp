@@ -34,6 +34,16 @@ PhotosModel::PhotosModel(QObject *parent)
     m_restWrapper->requestPhotos();
 }
 
+QHash<int, QByteArray> PhotosModel::roleNames() const
+{
+    QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
+
+    roles.insert(NameRole, "name");
+    roles.insert(ImageUrlRole, "imageUrl");
+
+    return roles;
+}
+
 QVariant PhotosModel::data(const QModelIndex &index, int role) const
 {
     // Return empty for invalid index
@@ -44,10 +54,10 @@ QVariant PhotosModel::data(const QModelIndex &index, int role) const
     const PhotoItem &photo = m_photos.at(index.row());
 
     switch (role) {
-        case Qt::DisplayRole:
-            return photo.title();
-        case Qt::DecorationRole:
-            return photo.photoUrl();
+        case PhotosModel::NameRole:
+            return photo.name();
+        case PhotosModel::ImageUrlRole:
+            return photo.imageUrl();
     }
 
     return QVariant();

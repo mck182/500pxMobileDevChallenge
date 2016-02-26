@@ -29,14 +29,14 @@
 class PhotoItem
 {
     Q_GADGET
-    Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(QString photoUrl READ photoUrl CONSTANT)
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QString imageUrl READ imageUrl CONSTANT)
 
 public:
     PhotoItem(const QJsonObject &jsonData);
 
-    QString title() const;
-    QString photoUrl() const;
+    QString name() const;
+    QString imageUrl() const;
 
 private:
     QJsonObject m_jsonData;
