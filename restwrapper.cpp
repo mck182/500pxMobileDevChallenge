@@ -36,7 +36,7 @@ RestWrapper::RestWrapper(QObject *parent)
 
 }
 
-void RestWrapper::requestPhotos(uint page, uint imageSize, const QString &feature)
+void RestWrapper::requestPhotos(uint page, const QString &imageSize, const QString &feature)
 {
     // Clear any errors from the UI
     m_lastConnectionError = QString();
@@ -48,7 +48,7 @@ void RestWrapper::requestPhotos(uint page, uint imageSize, const QString &featur
     // Set the request details
     requestDetails.addQueryItem("consumer_key", m_consumerKey);
     requestDetails.addQueryItem("feature", feature);
-    requestDetails.addQueryItem("image_size", QString::number(imageSize));
+    requestDetails.addQueryItem("image_size", imageSize);
 
     // No need to set the page param if it's 0
     if (page > 1) {
