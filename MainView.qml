@@ -21,40 +21,138 @@
 
 import QtQuick 2.5
 
-GridView {
-    id: photoGrid
-    cellWidth: 128
-    cellHeight: 128
+Flickable {
+    anchors.fill: parent
+    contentWidth: width
+    contentHeight: photoGrid.height
+    flickableDirection: Flickable.VerticalFlick
 
-    model: PhotosModel
+    Repeater {
+        id: photoGrid
 
-    delegate: Item {
-        width: photoGrid.cellWidth
-        height: photoGrid.cellHeight
+        width: parent.width
 
-        Image {
-            id: photoThumbnail
-            anchors.centerIn: parent
-            width: 96
-            height: 96
-            fillMode: Image.PreserveAspectFit
-            source: model.imageUrl
-            asynchronous: true
-            opacity: 0
+        property int currentX: 0
+        property int currentY: 0
+        property int currentRowHeight: 5
+        property var aheadPositions: []
 
-            OpacityAnimator {
-                target: photoThumbnail
-                duration: 300
-                from: 0
-                to: 1
-                running: photoThumbnail.status == Image.Ready
+        model: PhotosModel
+
+        // This is the way the layout works:
+        // * when an item is inserted, it is scaled to a pre-set row height
+        // * the view "peeks" at following photos, scaling them by the same ratio
+        //   and checking how many following photos will fit the current row
+        // * positions for the whole row are calculated
+        // * the remaining horizontal space (not covered by photos) is calculated
+        //   and distrubuted to the computed geometries
+        // * the row's height itself gets scaled so that it can fit the re-scaled
+        //   images (after the remaining width distrubition)
+
+        onItemAdded: {
+            if (aheadPositions.length > 1) {
+                item.x = aheadPositions.shift() + 5;
+                item.y = currentY;
+                item.height = photoGrid.currentRowHeight
+                if (aheadPositions.length >= 1) {
+                    item.width = aheadPositions[0] - item.x;
+                } else {
+                    item.width = photoGrid.width - item.x
+                }
+            } else {
+                photoGrid.aheadPositions = [];
+                photoGrid.currentX = 0;
+                photoGrid.currentY += photoGrid.currentRowHeight + 5;
+                item.x = currentX;
+                item.y = currentY;
+
+                photoGrid.currentRowHeight = 128;
+
+                var cumulativeWidth = item.size.width * item.ratio;
+
+                if (cumulativeWidth < photoGrid.width) {
+                    aheadPositions.push(cumulativeWidth);
+                } else {
+                    return;
+                }
+
+                var innerIndex = index;
+                var keepLooking = true;
+
+                while (keepLooking) {
+                    var nextPhotoSize = model.sizeForIndex(++innerIndex);
+                    var nextPhotoRatio = photoGrid.currentRowHeight / nextPhotoSize.height;
+
+                    // Check if the next photo would fit in the current row
+                    if (cumulativeWidth + (nextPhotoSize.width * nextPhotoRatio) < photoGrid.width) {
+                        cumulativeWidth += (nextPhotoSize.width * nextPhotoRatio) + 5;
+
+                        aheadPositions.push(cumulativeWidth);
+                    } else {
+                        keepLooking = false;
+                    }
+                }
+
+                // Now scale the row height so that the photos fill its width 100%
+                var difference = photoGrid.width - cumulativeWidth;
+
+                var newPositions = [];
+                for (var i = 0; i < aheadPositions.length; i++) {
+                    if (i == 0) {
+                        // The first one
+                        newPositions[i] = aheadPositions[i] +  difference * (aheadPositions[i] / cumulativeWidth);
+                    } else {
+                        // First we need to compensate for the previous item's growth
+                        var differenceFromPrevious = newPositions[i - 1] - aheadPositions[i - 1];
+                        // Then get the proportion of the current image to the cumulative width
+                        var relativeDifference = difference * ((aheadPositions[i] - aheadPositions[i - 1]) / cumulativeWidth);
+
+                        newPositions[i] = differenceFromPrevious + aheadPositions[i] + relativeDifference;
+                    }
+                }
+
+                // Set these newly computed geometries into aheadPositions
+                aheadPositions = newPositions;
+
+                // Now scale the row value itself
+                var rowRatio = currentRowHeight / cumulativeWidth;
+                currentRowHeight = rowRatio * parent.width;
+
+                // Finally set the current item's width and height
+                item.height = photoGrid.currentRowHeight;
+                item.width = item.size.width * item.ratio;
+
+                photoGrid.height = currentY + currentRowHeight;
+            }
+        }
+
+        delegate: Item {
+            id: photoItem
+
+            property size size: model.size
+            property real ratio: photoGrid.currentRowHeight / size.height
+
+            Image {
+                id: photoThumbnail
+                x: 0
+                y: 0
+                width: parent.width
+                height: parent.height //photoGrid.maxHeight
+                fillMode: Image.PreserveAspectFit
+                source: model.imageUrl
+                asynchronous: true
+                opacity: 0
+
+                OpacityAnimator {
+                    target: photoThumbnail
+                    duration: 300
+                    from: 0
+                    to: 1
+                    running: photoThumbnail.status == Image.Ready
+                }
             }
         }
     }
 
-    onAtYEndChanged: {
-        if (model.canFetchMore()) {
-            model.fetchMore();
-        }
     }
 }
