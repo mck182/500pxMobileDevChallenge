@@ -22,6 +22,10 @@
 #include "photosmodel.h"
 #include "restwrapper.h"
 
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
+
 PhotosModel::PhotosModel(QObject *parent)
     : QAbstractListModel(parent),
       m_restWrapper(new RestWrapper(this))
@@ -55,5 +59,12 @@ int PhotosModel::rowCount(const QModelIndex &parent) const
 
 void PhotosModel::onPhotosRetrieved(const QJsonDocument &jsonData)
 {
+    QJsonObject topLevelObject = jsonData.object();
+    QJsonArray photosArray = topLevelObject.value("photos").toArray();
 
+    beginInsertRows(QModelIndex(), m_photos.size(), m_photos.size() + photosArray.size());
+    Q_FOREACH (const QJsonValue &photo, photosArray) {
+        m_photos << PhotoItem(photo.toObject());
+    }
+    endInsertRows();
 }
