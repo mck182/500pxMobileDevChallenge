@@ -29,6 +29,12 @@ Flickable {
     contentHeight: photoGrid.height + (busyThrobber.visible ? busyThrobber.height : 0)
     flickableDirection: Flickable.VerticalFlick
 
+    onAtYEndChanged: {
+        if (photoGrid.model.canFetchMore()) {
+            photoGrid.model.fetchMore();
+        }
+    }
+
     Connections {
         target: rootWindow
         onCurrentIndexChanged: {
