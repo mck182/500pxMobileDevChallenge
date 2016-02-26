@@ -20,11 +20,12 @@
  */
 
 import QtQuick 2.5
+import QtQuick.Controls 1.4
 
 Flickable {
     anchors.fill: parent
     contentWidth: width
-    contentHeight: photoGrid.height
+    contentHeight: photoGrid.height + (busyThrobber.visible ? busyThrobber.height : 0)
     flickableDirection: Flickable.VerticalFlick
 
     Repeater {
@@ -154,5 +155,13 @@ Flickable {
         }
     }
 
+    BusyIndicator {
+        id: busyThrobber
+        anchors.top: photoGrid.bottom
+        anchors.horizontalCenter: photoGrid.horizontalCenter
+        width: 64
+        height: 64
+        running: photoGrid.model.hasActiveRequests
+        visible: running // Hide it when not running
     }
 }
