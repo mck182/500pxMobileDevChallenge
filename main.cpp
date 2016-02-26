@@ -23,16 +23,30 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#if defined(Q_OS_ANDROID)
+#include <QtAndroidExtras/QAndroidJniObject>
+#include <QtAndroidExtras/QtAndroid>
+#endif
+
 #include "photosmodel.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+#if defined(Q_OS_ANDROID)
+    QAndroidJniObject resources = QtAndroid::androidActivity().callObjectMethod("getResources", "()Landroid/content/res/Resources;");
+    QAndroidJniObject displayMetrics = resources.callObjectMethod("getDisplayMetrics", "()Landroid/util/DisplayMetrics;");
+    int density = displayMetrics.getField<int>("densityDpi");
+#else
+    int density = 192;
+#endif
+
     PhotosModel *photosModel = new PhotosModel();
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("PhotosModel", photosModel);
+    engine.rootContext()->setContextProperty("scaleUnit", density / 96);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();

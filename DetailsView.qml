@@ -25,7 +25,7 @@ ListView {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.bottomMargin: 32
+            anchors.bottomMargin: 9 * scaleUnit
 
             Image {
                 Layout.fillHeight: true
@@ -39,7 +39,7 @@ ListView {
             RowLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.maximumHeight: 64
+                Layout.maximumHeight: 24 * scaleUnit
                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                 Layout.margins: 16
 

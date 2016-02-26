@@ -3,6 +3,7 @@ TEMPLATE = app
 CONFIG += c++11
 
 QT += qml quick
+android: QT += androidextras
 
 SOURCES += main.cpp \
     restwrapper.cpp \
