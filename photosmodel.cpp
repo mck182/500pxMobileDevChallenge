@@ -124,3 +124,13 @@ void PhotosModel::fetchMore(const QModelIndex &parent)
     // Request photos from the current+1 page
     m_restWrapper->requestPhotos(++m_currentPage);
 }
+
+QSize PhotosModel::sizeForIndex(int index) const
+{
+    if (index >= m_photos.size()) {
+        return QSize();
+    }
+
+    return m_photos.at(index).size();
+}
+

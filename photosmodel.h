@@ -49,6 +49,13 @@ public:
     Q_INVOKABLE bool canFetchMore(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     Q_INVOKABLE void fetchMore(const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
+    /**
+     * @brief This method returns the size of the photo at @param index
+     *
+     * @param index Index of the photo
+     */
+    Q_INVOKABLE QSize sizeForIndex(int index) const;
+
 private Q_SLOTS:
     void onPhotosRetrieved(const QJsonDocument &jsonData);
 
