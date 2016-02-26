@@ -21,6 +21,8 @@
 
 #include "photoitem.h"
 
+#include <QJsonArray>
+
 PhotoItem::PhotoItem(const QJsonObject &jsonData)
 {
     m_jsonData = jsonData;
@@ -31,8 +33,18 @@ QString PhotoItem::name() const
     return m_jsonData.value("name").toString();
 }
 
-QString PhotoItem::imageUrl() const
+QString PhotoItem::imageUrl(const QString &size) const
 {
+    const QJsonArray imagesArray = m_jsonData.value("images").toArray();
+    for (int i = 0; i < imagesArray.size(); i++) {
+        const QJsonObject imageObject = imagesArray.at(i).toObject();
+
+        if (imageObject.value("size").toInt() == size.toInt()) {
+            return imageObject.value("url").toString();
+        }
+    }
+
+    // If no size match was found, return the default url
     return m_jsonData.value("image_url").toString();
 }
 

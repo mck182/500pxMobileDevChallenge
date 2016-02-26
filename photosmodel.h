@@ -40,6 +40,7 @@ public:
     enum ModelRoles {
         NameRole = Qt::UserRole,
         ImageUrlRole,
+        FullSizeImageUrlRole,
         SizeRole,
         UserFullnameRole,
         UserpicUrlRole

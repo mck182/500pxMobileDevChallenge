@@ -24,7 +24,7 @@ ListView {
                 Layout.fillWidth: true
                 Layout.margins: 16
 
-                source: model.imageUrl
+                source: model.fullSizeImageUrl
                 fillMode: Image.PreserveAspectFit
             }
 
@@ -36,9 +36,6 @@ ListView {
                 Layout.margins: 16
 
                 Rectangle {
-//                    Layout.fillHeight: true
-//                    Layout.maximumWidth: 64
-//                    Layout.maximumHeight: 64
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
                     height: 64

@@ -45,6 +45,7 @@ QHash<int, QByteArray> PhotosModel::roleNames() const
 
     roles.insert(NameRole, "name");
     roles.insert(ImageUrlRole, "imageUrl");
+    roles.insert(FullSizeImageUrlRole, "fullSizeImageUrl");
     roles.insert(SizeRole, "size");
     roles.insert(UserFullnameRole, "userFullname");
     roles.insert(UserpicUrlRole, "userpicUrl");
@@ -65,7 +66,9 @@ QVariant PhotosModel::data(const QModelIndex &index, int role) const
         case PhotosModel::NameRole:
             return photo.name();
         case PhotosModel::ImageUrlRole:
-            return photo.imageUrl();
+            return photo.imageUrl("30");
+    case PhotosModel::FullSizeImageUrlRole:
+            return photo.imageUrl("1080");
         case PhotosModel::SizeRole:
             return photo.size();
 

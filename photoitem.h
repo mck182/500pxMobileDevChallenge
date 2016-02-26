@@ -38,7 +38,7 @@ public:
     PhotoItem(const QJsonObject &jsonData);
 
     QString name() const;
-    QString imageUrl() const;
+    QString imageUrl(const QString &size = QString("30")) const;
     int width() const;
     int height() const;
     int userId() const;
