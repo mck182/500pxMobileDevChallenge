@@ -25,6 +25,8 @@
 #include <QAbstractListModel>
 #include <QJsonDocument>
 
+#include "photoitem.h"
+
 class RestWrapper;
 
 class PhotosModel : public QAbstractListModel

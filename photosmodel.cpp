@@ -40,7 +40,7 @@ QVariant PhotosModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    PhotoItem &photo = m_photos.at(index.row());
+    const PhotoItem &photo = m_photos.at(index.row());
 
     switch (role) {
         case Qt::DisplayRole:
@@ -54,6 +54,7 @@ QVariant PhotosModel::data(const QModelIndex &index, int role) const
 
 int PhotosModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return m_photos.size();
 }
 
