@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QJsonObject>
 
 class PhotoItem
 {
@@ -32,14 +33,13 @@ class PhotoItem
     Q_PROPERTY(QString photoUrl READ photoUrl CONSTANT)
 
 public:
-    PhotoItem(const QString &title, const QString &photoUrl);
+    PhotoItem(const QJsonObject &jsonData);
 
     QString title() const;
     QString photoUrl() const;
 
 private:
-    QString m_title;
-    QString m_photoUrl;
+    QJsonObject m_jsonData;
 };
 
 #endif // PHOTOITEM_H

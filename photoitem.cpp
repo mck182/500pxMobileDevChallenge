@@ -1,18 +1,16 @@
 #include "photoitem.h"
 
-PhotoItem::PhotoItem(const QString &title, const QString &photoUrl)
-    : m_title(title),
-      m_photoUrl(photoUrl)
+PhotoItem::PhotoItem(const QJsonObject &jsonData)
 {
-
+    m_jsonData = jsonData;
 }
 
 QString PhotoItem::title() const
 {
-    return m_title;
+    return m_jsonData.value("name").toString();
 }
 
 QString PhotoItem::photoUrl() const
 {
-    return m_photoUrl;
+    return m_jsonData.value("image_url").toString();
 }
