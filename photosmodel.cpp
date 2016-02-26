@@ -34,6 +34,8 @@ PhotosModel::PhotosModel(QObject *parent)
 {
     connect(m_restWrapper, &RestWrapper::photosRetrieved, this, &PhotosModel::onPhotosRetrieved);
     connect(m_restWrapper, &RestWrapper::requestActive, this, &PhotosModel::activeRequestChanged);
+    connect(m_restWrapper, &RestWrapper::requestError, this, &PhotosModel::connectionErrorChanged);
+
     m_restWrapper->requestPhotos();
 }
 
@@ -138,4 +140,14 @@ QSize PhotosModel::sizeForIndex(int index) const
 bool PhotosModel::hasActiveRequest() const
 {
     return m_restWrapper->hasActiveRequest();
+}
+
+QString PhotosModel::connectionError() const
+{
+    return m_restWrapper->lastConnectionError();
+}
+
+void PhotosModel::retryFetch() const
+{
+    m_restWrapper->requestPhotos(m_currentPage);
 }

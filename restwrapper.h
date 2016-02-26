@@ -49,6 +49,13 @@ public:
      */
     bool hasActiveRequest();
 
+    /**
+     * @brief Contains the last connection error that occurred, if any
+     *
+     * @return The error string for displaying to users
+     */
+    QString lastConnectionError() const;
+
 signals:
     /**
      * @brief Emitted when a non-error server response is retrieved
@@ -76,6 +83,7 @@ private:
 
     QString m_consumerKey;
     QString m_baseUrl;
+    QString m_lastConnectionError;
     QNetworkAccessManager *m_networkManager;
     uint m_requestsRefCount;
 };

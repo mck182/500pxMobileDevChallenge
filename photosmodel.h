@@ -33,6 +33,7 @@ class PhotosModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(bool hasActiveRequest READ hasActiveRequest NOTIFY activeRequestChanged)
+    Q_PROPERTY(QString connectionError READ connectionError NOTIFY connectionErrorChanged)
 
 public:
     enum ModelRoles {
@@ -64,8 +65,22 @@ public:
      */
     bool hasActiveRequest() const;
 
+    /**
+     * @brief Returns the connection error if there is any
+     *
+     * @return The error for displaying
+     */
+    QString connectionError() const;
+
+    /**
+     * @brief Method to allow manual retrying when network error occurs
+     */
+    Q_INVOKABLE void retryFetch() const;
+
 Q_SIGNALS:
-    void activeRequestChanged();
+    void activeRequestChanged(bool isActive);
+
+    void connectionErrorChanged();
 
 private Q_SLOTS:
     void onPhotosRetrieved(const QJsonDocument &jsonData);

@@ -29,6 +29,7 @@ RestWrapper::RestWrapper(QObject *parent)
     : QObject(parent),
       m_consumerKey("ujftkFBVkHDFUugAogXhfwb74aIUmDzSIKp0egtQ"),
       m_baseUrl("https://api.500px.com/v1"),
+      m_lastConnectionError(QString()),
       m_networkManager(new QNetworkAccessManager(this))
 {
 
@@ -36,6 +37,10 @@ RestWrapper::RestWrapper(QObject *parent)
 
 void RestWrapper::requestPhotos(uint page, uint imageSize, const QString &feature)
 {
+    // Clear any errors from the UI
+    m_lastConnectionError = QString();
+    Q_EMIT requestError(QNetworkReply::NoError);
+
     QUrl requestUrl(m_baseUrl + "/photos");
     QUrlQuery requestDetails;
 
@@ -67,7 +72,8 @@ void RestWrapper::requestPhotos(uint page, uint imageSize, const QString &featur
             Q_EMIT photosRetrieved(jsonReply);
         } else {
             // Print the error to console and emit the error type
-            qWarning() << reply->errorString();
+            qWarning() << reply->error() << reply->errorString();
+            m_lastConnectionError = reply->errorString();
             Q_EMIT requestError(reply->error());
         }
 
@@ -102,4 +108,9 @@ void RestWrapper::removeActiveRequest()
     if (m_requestsRefCount == 0) {
         Q_EMIT requestActive(false);
     }
+}
+
+QString RestWrapper::lastConnectionError() const
+{
+    return m_lastConnectionError;
 }

@@ -21,6 +21,7 @@
 
 import QtQuick 2.5
 import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.1
 
 Flickable {
     anchors.fill: parent
@@ -169,5 +170,28 @@ Flickable {
         height: 64
         running: photoGrid.model.hasActiveRequests
         visible: running // Hide it when not running
+    }
+
+    ColumnLayout {
+        anchors.top: photoGrid.bottom
+        anchors.topMargin: 16
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        Text {
+            Layout.fillWidth: true
+            color: "#fff"
+            text: photoGrid.model.connectionError
+            font.pointSize: 1.4 * rootWindow.fontMetrics.font.pointSize
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        Button {
+            Layout.alignment: Qt.AlignHCenter
+            text: "Retry"
+            onClicked: photoGrid.model.retryFetch();
+        }
+
+        visible: photoGrid.model.connectionError !== ""
     }
 }
