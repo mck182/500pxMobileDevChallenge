@@ -82,11 +82,24 @@ void PhotosModel::onPhotosRetrieved(const QJsonDocument &jsonData)
     // Extract the photos array from the server data
     QJsonArray photosArray = topLevelObject.value("photos").toArray();
 
-    // Add each photo to the model
-    beginInsertRows(QModelIndex(), m_photos.size(), m_photos.size() + photosArray.size());
+    // Add photos to the model and check for duplicates
+    QList<PhotoItem> photosToAdd;
     Q_FOREACH (const QJsonValue &photo, photosArray) {
-        m_photos << PhotoItem(photo.toObject());
+        const QJsonObject photoObject = photo.toObject();
+        const int photoId = photoObject.value("id").toInt();
+
+        // Check if this photo is already loaded and don't add it twice
+        if (m_photoIds.contains(photoId)) {
+            continue;
+        }
+
+        m_photoIds << photoId;
+        photosToAdd << PhotoItem(photo.toObject());
     }
+
+    // Now append the newly retrieved photos to the existing collection
+    beginInsertRows(QModelIndex(), m_photos.size(), m_photos.size() + photosToAdd.size());
+    m_photos << photosToAdd;
     endInsertRows();
 }
 

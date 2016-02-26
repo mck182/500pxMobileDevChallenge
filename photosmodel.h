@@ -54,6 +54,7 @@ private Q_SLOTS:
 private:
     RestWrapper *m_restWrapper;
     QList<PhotoItem> m_photos;
+    QList<int> m_photoIds;
     uint m_availablePages;
     uint m_currentPage;
 };
