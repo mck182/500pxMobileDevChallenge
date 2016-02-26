@@ -48,6 +48,10 @@ ApplicationWindow {
         }
     }
 
+    FontMetrics {
+        id: fontMetrics
+    }
+
     MainView {
         id: mainView
         anchors.fill: parent
