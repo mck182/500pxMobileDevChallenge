@@ -19,22 +19,36 @@
  *
  */
 
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
+import QtQuick 2.5
 
-#include "photosmodel.h"
+GridView {
+    id: photoGrid
+    cellWidth: 128
+    cellHeight: 128
 
-int main(int argc, char *argv[])
-{
-    QGuiApplication app(argc, argv);
+    model: PhotosModel
 
-    PhotosModel *photosModel = new PhotosModel();
+    delegate: Item {
+        width: photoGrid.cellWidth
+        height: photoGrid.cellHeight
 
-    QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("PhotosModel", photosModel);
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+        Image {
+            id: photoThumbnail
+            anchors.centerIn: parent
+            width: 96
+            height: 96
+            fillMode: Image.PreserveAspectFit
+            source: model.imageUrl
+            asynchronous: true
+            opacity: 0
 
-    return app.exec();
+            OpacityAnimator {
+                target: photoThumbnail
+                duration: 300
+                from: 0
+                to: 1
+                running: photoThumbnail.status == Image.Ready
+            }
+        }
+    }
 }
-
