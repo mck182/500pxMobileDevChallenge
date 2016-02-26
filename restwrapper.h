@@ -36,11 +36,11 @@ public:
     /**
      * @brief Method that retrieves the photos from specified page
      *
-     * @param feature Which category ('feature') to retrieve, default is "fresh_today"
-     * @param imageSize Which image sizes to retrieve, default is 3 (280px x 280px)
      * @param page Which page to retrieve photos from, default is first page
+     * @param imageSize Which image sizes to retrieve, default is 3 (280px x 280px)
+     * @param feature Which category ('feature') to retrieve, default is "fresh_today"
      */
-    void requestPhotos(const QString &feature = QString("fresh_today"), int imageSize = 3, int page = 0);
+    void requestPhotos(uint page = 1, uint imageSize = 3, const QString &feature = QString("fresh_today"));
 
 signals:
     /**

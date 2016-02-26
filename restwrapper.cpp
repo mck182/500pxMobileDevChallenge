@@ -34,7 +34,7 @@ RestWrapper::RestWrapper(QObject *parent)
 
 }
 
-void RestWrapper::requestPhotos(const QString &feature, int page, int imageSize)
+void RestWrapper::requestPhotos(uint page, uint imageSize, const QString &feature)
 {
     QUrl requestUrl(m_baseUrl + "/photos");
     QUrlQuery requestDetails;
@@ -45,7 +45,7 @@ void RestWrapper::requestPhotos(const QString &feature, int page, int imageSize)
     requestDetails.addQueryItem("image_size", QString::number(imageSize));
 
     // No need to set the page param if it's 0
-    if (page > 0) {
+    if (page > 1) {
         requestDetails.addQueryItem("page", QString::number(page));
     }
 
