@@ -21,16 +21,37 @@
 
 import QtQuick 2.5
 import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.1
 
 ApplicationWindow {
+    id: rootWindow
     visible: true
     width: 640
     height: 480
     title: qsTr("500px Mobile Dev Challenge")
+    color: "#5a5a5a"
+
+    property int currentIndex: -1
+
 
     MainView {
         id: mainView
         anchors.fill: parent
+    }
+
+    DetailsView {
+        id: detailsView
+        anchors.fill: parent
+        z: 10
+        opacity: rootWindow.currentIndex > -1 ? 1 : 0
+        visible: rootWindow.currentIndex > -1 || opacity > 0
+        currentIndex: rootWindow.currentIndex
+
+        Behavior on opacity {
+            OpacityAnimator {
+                target: detailsView
+            }
+        }
     }
 }
 

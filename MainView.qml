@@ -152,6 +152,12 @@ Flickable {
                     running: photoThumbnail.status == Image.Ready
                 }
             }
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: rootWindow.currentIndex = index;
+            }
         }
     }
 
