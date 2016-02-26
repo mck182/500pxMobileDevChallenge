@@ -33,6 +33,20 @@ ApplicationWindow {
 
     property int currentIndex: -1
 
+    toolBar: ToolBar {
+        RowLayout {
+            anchors.fill: parent
+
+            ToolButton {
+                visible: rootWindow.currentIndex > -1
+                text: "Back"
+
+                onClicked: {
+                    rootWindow.currentIndex = -1;
+                }
+            }
+        }
+    }
 
     MainView {
         id: mainView
