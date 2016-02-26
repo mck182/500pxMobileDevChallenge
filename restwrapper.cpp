@@ -29,6 +29,7 @@ RestWrapper::RestWrapper(QObject *parent)
     : QObject(parent),
       m_consumerKey("ujftkFBVkHDFUugAogXhfwb74aIUmDzSIKp0egtQ"),
       m_baseUrl("https://api.500px.com/v1"),
+      m_requestsRefCount(0),
       m_lastConnectionError(QString()),
       m_networkManager(new QNetworkAccessManager(this))
 {
