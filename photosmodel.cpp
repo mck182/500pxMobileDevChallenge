@@ -150,7 +150,7 @@ void PhotosModel::fetchMore(const QModelIndex &parent)
 {
     Q_UNUSED(parent);
     // Request photos from the current+1 page
-    m_restWrapper->requestPhotos(++m_currentPage, m_feature);
+    m_restWrapper->requestPhotos(m_currentPage + 1, m_feature);
 }
 
 QSize PhotosModel::sizeForIndex(int index) const
