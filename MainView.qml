@@ -32,9 +32,29 @@ Flickable {
 
     property int lastIndex: -1
 
+    onWidthChanged: {
+        relayoutTimer.restart();
+    }
+
     onAtYEndChanged: {
         if (photoGrid.model.canFetchMore()) {
             photoGrid.model.fetchMore();
+        }
+    }
+
+    // Events compression timer
+    Timer {
+        id: relayoutTimer
+        interval: 100
+        repeat: false
+        running: false
+
+        onTriggered: {
+            photoGrid.currentY = 0;
+            photoGrid.currentRowHeight = 5;
+            for (var i = 0; i < photoGrid.count; i++) {
+                photoGrid.onItemAdded(i, photoGrid.itemAt(i));
+            }
         }
     }
 
