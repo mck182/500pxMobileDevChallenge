@@ -86,7 +86,12 @@ Flickable {
     Connections {
         target: tabGroup
         onCurrentChanged: {
-            photoGrid.model.feature = tabGroup.current.feature
+            // Reset the positioning properties
+            photoGrid.currentY = 0;
+            photoGrid.currentRowHeight = 5;
+
+            // Set the feature to the model
+            photoGrid.model.feature = tabGroup.current.feature;
         }
     }
 
