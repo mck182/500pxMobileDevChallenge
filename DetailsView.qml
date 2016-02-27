@@ -6,16 +6,30 @@ ListView {
 
     orientation: ListView.Horizontal
     snapMode: ListView.SnapOneItem
+    focus: true
+    highlightRangeMode: ListView.StrictlyEnforceRange
+    currentIndex: rootWindow.currentIndex
 
     model: PhotosModel
-
-    currentIndex: rootWindow.currentIndex
 
     onCurrentIndexChanged: {
         rootWindow.currentIndex = currentIndex;
     }
 
-    highlightRangeMode: ListView.StrictlyEnforceRange
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Back && detailsView.currentIndex != -1) {
+            rootWindow.currentIndex = -1;
+            event.accepted = true;
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: {
+            rootWindow.currentIndex = -1;
+        }
+    }
 
     delegate: Rectangle {
         id: detailsItem
