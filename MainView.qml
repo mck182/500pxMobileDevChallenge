@@ -186,7 +186,7 @@ Flickable {
                 width: parent.width
                 height: parent.height //photoGrid.maxHeight
                 fillMode: Image.PreserveAspectFit
-                source: model.imageUrl
+                source: width < 400 ? model.imageUrl : model.fullSizeImageUrl
                 asynchronous: true
                 opacity: 0
                 z: flickable.lastIndex == index ? 100 : 1
