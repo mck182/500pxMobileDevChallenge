@@ -61,7 +61,7 @@ void RestWrapper::requestPhotos(uint page, const QString &feature, const QString
     requestDetails.addQueryItem("feature", feature);
     requestDetails.addQueryItem("image_size", imageSize);
 
-    // No need to set the page param if it's 0
+    // No need to set the page param if it's 1
     if (page > 1) {
         requestDetails.addQueryItem("page", QString::number(page));
     }
