@@ -26,9 +26,9 @@
 #include <QJsonArray>
 #include <QJsonValue>
 
-PhotosModel::PhotosModel(QObject *parent)
+PhotosModel::PhotosModel(RestWrapper *restWrapper, QObject *parent)
     : QAbstractListModel(parent),
-      m_restWrapper(new RestWrapper(this)),
+      m_restWrapper(restWrapper),
       m_currentPage(1),
       m_availablePages(0)
 {

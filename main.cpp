@@ -29,6 +29,7 @@
 #endif
 
 #include "photosmodel.h"
+#include "restwrapper.h"
 
 int main(int argc, char *argv[])
 {
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
     int density = 192;
 #endif
 
-    PhotosModel *photosModel = new PhotosModel();
+    PhotosModel *photosModel = new PhotosModel(new RestWrapper());
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("PhotosModel", photosModel);

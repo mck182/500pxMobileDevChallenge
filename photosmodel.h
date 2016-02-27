@@ -48,7 +48,7 @@ public:
     };
     Q_ENUM(ModelRoles)
 
-    explicit PhotosModel(QObject *parent = 0);
+    explicit PhotosModel(RestWrapper *restWrapper, QObject *parent = 0);
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
