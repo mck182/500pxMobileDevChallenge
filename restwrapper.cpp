@@ -47,6 +47,13 @@ void RestWrapper::requestPhotos(uint page, const QString &feature, const QString
         return;
     }
 
+    // If no network is available, just error out
+    if (m_networkManager->networkAccessible() == QNetworkAccessManager::NotAccessible) {
+        m_lastConnectionError = QString("Network unavailable");
+        Q_EMIT requestError(QNetworkReply::NetworkSessionFailedError);
+        return;
+    }
+
     // Clear any errors from the UI
     if (!m_lastConnectionError.isEmpty()) {
         m_lastConnectionError = QString();
