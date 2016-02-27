@@ -35,6 +35,7 @@ class PhotosModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(bool hasActiveRequest READ hasActiveRequest NOTIFY activeRequestChanged)
     Q_PROPERTY(QString connectionError READ connectionError NOTIFY connectionErrorChanged)
+    Q_PROPERTY(QString feature READ feature WRITE setFeature NOTIFY featureChanged)
 
 public:
     enum ModelRoles {
@@ -81,10 +82,24 @@ public:
      */
     Q_INVOKABLE void retryFetch() const;
 
+    /**
+     * @brief This is the feature (category) that the model currently contains
+     * @return name of the feature
+     */
+    QString feature() const;
+
+    /**
+     * @brief Sets the feature to load; issues a network request
+     * @param feature Name of the feature to request
+     */
+    void setFeature(const QString &feature);
+
 Q_SIGNALS:
     void activeRequestChanged(bool isActive);
 
     void connectionErrorChanged();
+
+    void featureChanged();
 
 private Q_SLOTS:
     void onPhotosRetrieved(const QJsonDocument &jsonData);
@@ -94,6 +109,7 @@ private:
     QList<PhotoItem> m_photos;
     QList<int> m_photoIds;
     QHash<int, UserItem> m_users;
+    QString m_feature;
     uint m_availablePages;
     uint m_currentPage;
 };

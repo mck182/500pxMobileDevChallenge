@@ -144,7 +144,7 @@ void PhotosModel::fetchMore(const QModelIndex &parent)
 {
     Q_UNUSED(parent);
     // Request photos from the current+1 page
-    m_restWrapper->requestPhotos(++m_currentPage);
+    m_restWrapper->requestPhotos(++m_currentPage, m_feature);
 }
 
 QSize PhotosModel::sizeForIndex(int index) const
@@ -168,5 +168,25 @@ QString PhotosModel::connectionError() const
 
 void PhotosModel::retryFetch() const
 {
-    m_restWrapper->requestPhotos(m_currentPage);
+    m_restWrapper->requestPhotos(m_currentPage, m_feature);
+}
+
+QString PhotosModel::feature() const
+{
+    return m_feature;
+}
+
+void PhotosModel::setFeature(const QString &feature)
+{
+    m_feature = feature;
+    Q_EMIT featureChanged();
+
+    beginResetModel();
+    m_photos.clear();
+    m_users.clear();
+    m_photoIds.clear();
+    m_currentPage = 1;
+    endResetModel();
+
+    m_restWrapper->requestPhotos(1, m_feature, QString("30,1080"));
 }
