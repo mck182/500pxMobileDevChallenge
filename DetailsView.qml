@@ -56,8 +56,8 @@ ListView {
                 Rectangle {
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
-                    height: 64
-                    width: 64
+                    height: detailsColumn.height
+                    width: height
 
                     Image {
                         id: userPic
@@ -68,6 +68,7 @@ ListView {
                 }
 
                 ColumnLayout {
+                    id: detailsColumn
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
@@ -78,7 +79,11 @@ ListView {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         color: "#fff"
                         text: model.name
-                        font.pointSize: 1.4 * font.pointSize
+                        elide: Text.ElideRight
+
+                        Component.onCompleted: {
+                            font.pointSize = 1.2 * font.pointSize;
+                        }
                     }
 
                     Text {
@@ -87,6 +92,7 @@ ListView {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         color: "#fff"
                         text: model.userFullname
+                        elide: Text.ElideRight
                     }
                 }
 

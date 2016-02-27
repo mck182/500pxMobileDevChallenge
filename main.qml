@@ -27,7 +27,7 @@ ApplicationWindow {
     id: rootWindow
     visible: true
     width: 640
-    height: 480
+    height: 960
     title: qsTr("500px Mobile Dev Challenge")
     color: "#5a5a5a"
 
@@ -150,10 +150,6 @@ ApplicationWindow {
                 }
             }
         }
-    }
-
-    FontMetrics {
-        id: fontMetrics
     }
 
     MainView {

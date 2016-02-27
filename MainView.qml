@@ -113,7 +113,7 @@ Flickable {
                 item.x = currentX;
                 item.y = currentY;
 
-                photoGrid.currentRowHeight = 128;
+                photoGrid.currentRowHeight = 60 * scaleUnit;
 
                 var cumulativeWidth = item.size.width * item.ratio;
 
@@ -287,8 +287,12 @@ Flickable {
             Layout.fillWidth: true
             color: "#fff"
             text: photoGrid.model.connectionError
-            font.pointSize: 1.4 * rootWindow.fontMetrics.font.pointSize
             horizontalAlignment: Text.AlignHCenter
+
+            // This is to avoid binding loop errors
+            Component.onCompleted: {
+                font.pointSize = 1.4 * font.pointSize;
+            }
         }
 
         Button {
