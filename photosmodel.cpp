@@ -128,8 +128,8 @@ void PhotosModel::onPhotosRetrieved(const QJsonDocument &jsonData)
     // It can happen that the photos are added faster than the model
     // is querying for them, so if we fetched less than 3 photos from
     // the last run, issue another request right away
-    if (photosToAdd.size() < 3) {
         qDebug() << "Fetching more";
+    if (photosToAdd.size() < 3 && canFetchMore()) {
         fetchMore();
     }
 }
