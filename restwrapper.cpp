@@ -44,8 +44,10 @@ void RestWrapper::requestPhotos(uint page, const QString &feature, const QString
     }
 
     // Clear any errors from the UI
-    m_lastConnectionError = QString();
-    Q_EMIT requestError(QNetworkReply::NoError);
+    if (!m_lastConnectionError.isEmpty()) {
+        m_lastConnectionError = QString();
+        Q_EMIT requestError(QNetworkReply::NoError);
+    }
 
     QUrl requestUrl(m_baseUrl + "/photos");
     QUrlQuery requestDetails;
