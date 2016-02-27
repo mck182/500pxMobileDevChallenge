@@ -38,6 +38,11 @@ RestWrapper::RestWrapper(QObject *parent)
 
 void RestWrapper::requestPhotos(uint page, const QString &feature, const QString &imageSize)
 {
+    if (m_requestsRefCount > 3) {
+        qWarning() << "Active requests are limited to be max 3 at the same time";
+        return;
+    }
+
     // Clear any errors from the UI
     m_lastConnectionError = QString();
     Q_EMIT requestError(QNetworkReply::NoError);
