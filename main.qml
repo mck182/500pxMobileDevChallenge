@@ -38,8 +38,22 @@ ApplicationWindow {
             anchors.fill: parent
 
             ToolButton {
+                id: backButton
+                Layout.fillHeight: true
+                Layout.leftMargin: 2 * scaleUnit
+                Layout.rightMargin: 4 * scaleUnit
+
                 visible: rootWindow.currentIndex > -1
-                text: "Back"
+
+                // This is a workaround for the icon breaking
+                // the layout if it's too big
+                Image {
+                    anchors.fill: parent
+                    anchors.margins: 10 * scaleUnit
+                    anchors.leftMargin: 2 * scaleUnit
+                    source: "qrc:/icons/fa-arrow-left.png"
+                    fillMode: Image.PreserveAspectFit
+                }
 
                 onClicked: {
                     rootWindow.currentIndex = -1;
