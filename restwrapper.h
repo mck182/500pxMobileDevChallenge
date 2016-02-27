@@ -40,7 +40,7 @@ public:
      * @param imageSize Which image sizes to retrieve, default is 3 (280px x 280px)
      * @param feature Which category ('feature') to retrieve, default is "fresh_today"
      */
-    void requestPhotos(uint page = 1, const QString &imageSize = QString("30,1080"), const QString &feature = QString("fresh_today"));
+    void requestPhotos(uint page = 1, const QString &feature = QString("fresh_today"), const QString &imageSize = QString("30,1080"));
 
     /**
      * @brief Indicates if there are any active network requests waiting for reply

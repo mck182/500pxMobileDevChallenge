@@ -36,7 +36,7 @@ RestWrapper::RestWrapper(QObject *parent)
 
 }
 
-void RestWrapper::requestPhotos(uint page, const QString &imageSize, const QString &feature)
+void RestWrapper::requestPhotos(uint page, const QString &feature, const QString &imageSize)
 {
     // Clear any errors from the UI
     m_lastConnectionError = QString();
