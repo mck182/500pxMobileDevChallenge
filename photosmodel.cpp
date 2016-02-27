@@ -35,8 +35,6 @@ PhotosModel::PhotosModel(QObject *parent)
     connect(m_restWrapper, &RestWrapper::photosRetrieved, this, &PhotosModel::onPhotosRetrieved);
     connect(m_restWrapper, &RestWrapper::requestActive, this, &PhotosModel::activeRequestChanged);
     connect(m_restWrapper, &RestWrapper::requestError, this, &PhotosModel::connectionErrorChanged);
-
-    m_restWrapper->requestPhotos();
 }
 
 QHash<int, QByteArray> PhotosModel::roleNames() const
@@ -126,6 +124,14 @@ void PhotosModel::onPhotosRetrieved(const QJsonDocument &jsonData)
     beginInsertRows(QModelIndex(), m_photos.size(), m_photos.size() + photosToAdd.size());
     m_photos << photosToAdd;
     endInsertRows();
+
+    // It can happen that the photos are added faster than the model
+    // is querying for them, so if we fetched less than 3 photos from
+    // the last run, issue another request right away
+    if (photosToAdd.size() < 3) {
+        qDebug() << "Fetching more";
+        fetchMore();
+    }
 }
 
 bool PhotosModel::canFetchMore(const QModelIndex &parent) const
