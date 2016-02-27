@@ -25,6 +25,10 @@
 #include <QNetworkReply>
 #include <QUrlQuery>
 
+#if defined(TEST_MODE)
+#include <QtTest/QtTest>
+#endif
+
 RestWrapper::RestWrapper(QObject *parent)
     : QObject(parent),
       m_consumerKey("ujftkFBVkHDFUugAogXhfwb74aIUmDzSIKp0egtQ"),
@@ -66,6 +70,17 @@ void RestWrapper::requestPhotos(uint page, const QString &feature, const QString
 
     QNetworkRequest photoRequest;
     photoRequest.setUrl(requestUrl);
+
+#if defined(TEST_MODE)
+    QString testFile;
+    if (page == 1) {
+        testFile = QFINDTESTDATA("test_data1.json");
+    } else if (page == 2) {
+        testFile = QFINDTESTDATA("test_data2.json");
+    }
+    qDebug() << testFile;
+    photoRequest.setUrl(QUrl::fromLocalFile(testFile));
+#endif
 
     // Send the request
     QNetworkReply *reply = m_networkManager->get(photoRequest);
