@@ -13,3 +13,15 @@ Features:
 * Indication of "working" when requesting additional photos (ie when scrolled to the bottom)
 * Network errors handling with manual "retry" feature (a button)
 * Unit tests coverage using QtTestLib (needs to be compiled separately)
+
+Running the tests
+-----------------
+The tests require qmake and QtTestLib installed. These should normally come
+with any Linux distribution that has Qt installed. On Ubuntu-based distributions
+the packages qt5-qmake and qtbase5-dev should suffice.
+
+Once all dependencies are installed, simply cd to the tests/ folder and run:
+
+	qmake .
+	make
+	make check
