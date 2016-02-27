@@ -69,7 +69,7 @@ Flickable {
             }
 
             // Check if the currently zoomed photo is in the view
-            // range, if not, scroll the view to contain the item
+            // range, if not, scroll the grid view to contain the item
             var currentItemY = photoGrid.itemAt(rootWindow.currentIndex).y;
             var currentItemHeight = photoGrid.itemAt(rootWindow.currentIndex).height;
 
@@ -135,10 +135,21 @@ Flickable {
                 needsToWait--;
                 return;
             }
+
+            // If any ahead-computed positions exist,
+            // simply place the item to the already
+            // computed position
             if (aheadPositions.length > 1) {
+                // Take the first item and add 5 pixels spacing
                 item.x = aheadPositions.shift() + 5;
                 item.y = currentY;
                 item.height = photoGrid.currentRowHeight
+                item.visible = true;
+
+                // With the last item it needs to subtract
+                // from the screen width as there is no other
+                // aheadPosition to subtract from (it itself
+                // is the last one)
                 if (aheadPositions.length >= 1) {
                     item.width = aheadPositions[0] - item.x;
                 } else {
@@ -150,7 +161,9 @@ Flickable {
                 photoGrid.currentY += photoGrid.currentRowHeight + 5;
                 item.x = currentX;
                 item.y = currentY;
+                item.visible = true;
 
+                // Set default height for the row
                 photoGrid.currentRowHeight = 60 * scaleUnit;
 
                 var cumulativeWidth = item.size.width * item.ratio;
@@ -166,6 +179,7 @@ Flickable {
                 var hideRow = false;
 
                 while (keepLooking) {
+                    // Get the next item's size from the model
                     var nextPhotoSize = model.sizeForIndex(++innerIndex);
 
                     // The model does not have enough images to fill this row
@@ -174,6 +188,9 @@ Flickable {
                         hideRow = true;
                         break;
                     }
+
+                    // Calculate the ratio for the next photo
+                    // with which it needs to be scaled
                     var nextPhotoRatio = photoGrid.currentRowHeight / nextPhotoSize.height;
 
                     // Check if the next photo would fit in the current row
@@ -182,6 +199,7 @@ Flickable {
 
                         aheadPositions.push(cumulativeWidth);
                     } else {
+                        // We cannot place anymore photos in this row
                         keepLooking = false;
                     }
                 }
