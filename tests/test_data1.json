@@ -1,0 +1,81 @@
+{
+  "current_page": 1,
+  "total_pages": 2,
+  "total_items": 49526,
+  "photos":  [
+     {
+      "id": 123,
+      "user_id": 288560,
+      "name": "First",
+      "width": 1080,
+      "height": 2080,
+      "image_url": "image_test_url",
+      "images":  [
+         {
+          "size": 30,
+          "url": "image_test_url_small"
+        },
+         {
+          "size": 1080,
+          "url": "image_test_url_big"
+        }
+      ],
+      "user":  {
+        "id": 288560,
+        "fullname": "User 1",
+        "userpic_url": "userpic_test_url"
+      }
+    },
+     {
+      "id": 456,
+      "user_id": 14541183,
+      "name": "Second",
+      "width": 6016,
+      "height": 4000,
+      "image_url": "image_test_url2",
+      "images":  [
+         {
+          "size": 30,
+          "url": "image_test_url_small2"
+        },
+         {
+          "size": 1080,
+          "url": "image_test_url_big2"
+        }
+      ],
+      "user":  {
+        "id": 14541183,
+        "fullname": "User 2",
+        "userpic_url": "userpic_test_url2"
+      }
+    },
+     {
+      "id": 789,
+      "user_id": 16120733,
+      "name": "Third",
+      "width": 2592,
+      "height": 1944,
+      "image_url": "image_test_url3",
+      "images":  [
+         {
+          "size": 30,
+          "url": "image_test_url_small2"
+        },
+         {
+          "size": 1080,
+          "url": "image_test_url_big2"
+        }
+      ],
+      "user":  {
+        "id": 16120733,
+        "fullname": "User 3",
+        "userpic_url": "userpic_test_url3"
+      }
+    }
+  ],
+  "filters":  {
+    "category": false,
+    "exclude": false
+  },
+  "feature": "fresh_today"
+}
