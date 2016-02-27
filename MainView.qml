@@ -28,6 +28,7 @@ Flickable {
     anchors.fill: parent
     contentWidth: width
     contentHeight: photoGrid.height + (busyThrobber.visible ? busyThrobber.height : 0)
+                                    + (errorColumn.visible ? errorColumn.height + 4 * scaleUnit : 0)
     flickableDirection: Flickable.VerticalFlick
 
     property int lastIndex: -1
@@ -362,10 +363,13 @@ Flickable {
     }
 
     ColumnLayout {
+        id: errorColumn
         anchors.top: photoGrid.bottom
         anchors.topMargin: 16
         anchors.left: parent.left
         anchors.right: parent.right
+
+        visible: photoGrid.model.connectionError !== ""
 
         Text {
             Layout.fillWidth: true
@@ -384,8 +388,6 @@ Flickable {
             text: "Retry"
             onClicked: photoGrid.model.retryFetch();
         }
-
-        visible: photoGrid.model.connectionError !== ""
     }
 
     ScaleAnimator {
