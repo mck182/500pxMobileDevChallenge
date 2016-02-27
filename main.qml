@@ -167,7 +167,6 @@ ApplicationWindow {
         z: 10
         opacity: rootWindow.currentIndex > -1 ? 1 : 0
         visible: rootWindow.currentIndex > -1 || opacity > 0
-        currentIndex: rootWindow.currentIndex
 
         Behavior on opacity {
             OpacityAnimator {

@@ -24,10 +24,13 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 
 Flickable {
+    id: flickable
     anchors.fill: parent
     contentWidth: width
     contentHeight: photoGrid.height + (busyThrobber.visible ? busyThrobber.height : 0)
     flickableDirection: Flickable.VerticalFlick
+
+    property int lastIndex: -1
 
     onAtYEndChanged: {
         if (photoGrid.model.canFetchMore()) {
@@ -39,10 +42,26 @@ Flickable {
         target: rootWindow
         onCurrentIndexChanged: {
             if (rootWindow.currentIndex == -1) {
+                scaleAnimation.target = photoGrid.itemAt(flickable.lastIndex)
+                scaleAnimation.running = true;
+                flickable.lastIndex = -1
                 return;
             }
 
-            contentY = photoGrid.itemAt(rootWindow.currentIndex).y
+            // Check if the currently zoomed photo is in the view
+            // range, if not, scroll the view to contain the item
+            var currentItemY = photoGrid.itemAt(rootWindow.currentIndex).y;
+            var currentItemHeight = photoGrid.itemAt(rootWindow.currentIndex).height;
+
+            if (currentItemY < flickable.contentY) {
+                contentY = currentItemY;
+            } else if (currentItemY + currentItemHeight > flickable.contentY + flickable.height) {
+                contentY = currentItemY - currentItemHeight;
+            }
+
+            lastIndex = rootWindow.currentIndex;
+        }
+    }
 
     Connections {
         target: tabGroup
@@ -170,6 +189,7 @@ Flickable {
                 source: model.imageUrl
                 asynchronous: true
                 opacity: 0
+                z: flickable.lastIndex == index ? 100 : 1
 
                 OpacityAnimator {
                     target: photoThumbnail
@@ -183,7 +203,66 @@ Flickable {
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: rootWindow.currentIndex = index;
+                onClicked: {
+                    rootWindow.currentIndex = index;
+                    zoomEffectImage.source = photoThumbnail.source;
+                    zoomEffectRect.x = photoItem.x;
+                    zoomEffectRect.y = photoItem.y;
+                    zoomEffectRect.width = photoItem.width;
+                    zoomEffectRect.height = photoItem.height;
+                    zoomEffectRect.visible = true;
+
+                    zoomEffect.start();
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: zoomEffectRect
+        border.width: 1
+        border.color: "#000"
+        color: "#000"
+        visible: false
+
+        Image {
+            id: zoomEffectImage
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
+        }
+
+        ParallelAnimation {
+            id: zoomEffect
+            running: false
+
+            PropertyAnimation {
+                target: zoomEffectRect
+                properties: "y"
+                to: flickable.contentY
+            }
+
+            PropertyAnimation {
+                target: zoomEffectRect
+                properties: "x"
+                to: flickable.contentX
+            }
+
+            NumberAnimation {
+                target: zoomEffectRect
+                property: "width"
+                to: rootWindow.width
+            }
+
+            NumberAnimation {
+                target: zoomEffectRect
+                property: "height"
+                to: rootWindow.height
+            }
+
+            OpacityAnimator {
+                target: zoomEffectRect
+                from: 1
+                to: 0
             }
         }
     }
@@ -219,5 +298,13 @@ Flickable {
         }
 
         visible: photoGrid.model.connectionError !== ""
+    }
+
+    ScaleAnimator {
+        id: scaleAnimation
+        from: 1.4
+        to: 1
+        easing.type: Easing.OutBack
+        duration: 600
     }
 }

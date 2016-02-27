@@ -28,12 +28,22 @@ ListView {
             anchors.bottomMargin: 9 * scaleUnit
 
             Image {
+                id: bigPhoto
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.margins: 16
 
                 source: model.fullSizeImageUrl
                 fillMode: Image.PreserveAspectFit
+                opacity: 0
+
+                OpacityAnimator {
+                    target: bigPhoto
+                    duration: 300
+                    from: 0
+                    to: 1
+                    running: bigPhoto.status == Image.Ready
+                }
             }
 
             RowLayout {
