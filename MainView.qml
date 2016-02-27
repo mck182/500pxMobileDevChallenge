@@ -43,6 +43,11 @@ Flickable {
             }
 
             contentY = photoGrid.itemAt(rootWindow.currentIndex).y
+
+    Connections {
+        target: tabGroup
+        onCurrentChanged: {
+            photoGrid.model.feature = tabGroup.current.feature
         }
     }
 
@@ -57,6 +62,10 @@ Flickable {
         property var aheadPositions: []
 
         model: PhotosModel
+
+        Component.onCompleted: {
+            photoGrid.model.feature = tabGroup.current.feature;
+        }
 
         // This is the way the layout works:
         // * when an item is inserted, it is scaled to a pre-set row height

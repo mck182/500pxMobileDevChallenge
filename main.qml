@@ -35,7 +35,8 @@ ApplicationWindow {
 
     toolBar: ToolBar {
         RowLayout {
-            anchors.fill: parent
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             ToolButton {
                 id: backButton
@@ -57,6 +58,95 @@ ApplicationWindow {
 
                 onClicked: {
                     rootWindow.currentIndex = -1;
+                }
+            }
+
+            ExclusiveGroup {
+                id: tabGroup
+            }
+
+            ToolButton {
+                id: popularCategory
+                Layout.fillHeight: true
+                Layout.leftMargin: 2 * scaleUnit
+                Layout.rightMargin: 2 * scaleUnit
+
+                property string feature: "popular"
+
+                text: "Popular"
+                checkable: true
+                checked: true
+                exclusiveGroup: tabGroup
+                visible: rootWindow.currentIndex == -1
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "steelblue"
+                    opacity: 0.3
+                    visible: parent.checked
+                }
+            }
+
+            ToolButton {
+                id: editorsCategory
+                Layout.fillHeight: true
+                Layout.leftMargin: 2 * scaleUnit
+                Layout.rightMargin: 2 * scaleUnit
+
+                property string feature: "editors"
+
+                text: "Editor's"
+                checkable: true
+                exclusiveGroup: tabGroup
+                visible: rootWindow.currentIndex == -1
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "steelblue"
+                    opacity: 0.3
+                    visible: parent.checked
+                }
+            }
+
+            ToolButton {
+                id: upcomingCategory
+                Layout.fillHeight: true
+                Layout.leftMargin: 2 * scaleUnit
+                Layout.rightMargin: 2 * scaleUnit
+
+                property string feature: "upcoming"
+
+                text: "Upcoming"
+                checkable: true
+                exclusiveGroup: tabGroup
+                visible: rootWindow.currentIndex == -1
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "steelblue"
+                    opacity: 0.3
+                    visible: parent.checked
+                }
+            }
+
+            ToolButton {
+                id: freshCategory
+                Layout.fillHeight: true
+                Layout.leftMargin: 2 * scaleUnit
+                Layout.rightMargin: 2 * scaleUnit
+
+                property string feature: "fresh_today"
+
+                text: "Fresh"
+                checkable: true
+                exclusiveGroup: tabGroup
+                visible: rootWindow.currentIndex == -1
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "steelblue"
+                    opacity: 0.3
+                    visible: parent.checked
                 }
             }
         }
