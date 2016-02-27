@@ -29,7 +29,7 @@ ApplicationWindow {
     width: 640
     height: 960
     title: qsTr("500px Mobile Dev Challenge")
-    color: "#5a5a5a"
+    color: "#555"
 
     property int currentIndex: -1
 
