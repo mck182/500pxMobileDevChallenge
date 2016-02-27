@@ -3,7 +3,6 @@
         <file>main.qml</file>
         <file>MainView.qml</file>
         <file>DetailsView.qml</file>
-        <file>data/fontawesome-webfont.ttf</file>
         <file>icons/fa-arrow-left.png</file>
     </qresource>
 </RCC>
