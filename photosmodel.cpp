@@ -29,8 +29,8 @@
 PhotosModel::PhotosModel(RestWrapper *restWrapper, QObject *parent)
     : QAbstractListModel(parent),
       m_restWrapper(restWrapper),
-      m_currentPage(1),
-      m_availablePages(0)
+      m_availablePages(0),
+      m_currentPage(1)
 {
     connect(m_restWrapper, &RestWrapper::photosRetrieved, this, &PhotosModel::onPhotosRetrieved);
     connect(m_restWrapper, &RestWrapper::requestActive, this, &PhotosModel::activeRequestChanged);
