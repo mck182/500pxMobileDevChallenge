@@ -79,6 +79,8 @@ Flickable {
         property int currentY: 0
         property int currentRowHeight: 5
         property var aheadPositions: []
+        property var waitingItems: []
+        property int needsToWait: 0
 
         model: PhotosModel
 
@@ -95,8 +97,19 @@ Flickable {
         //   and distrubuted to the computed geometries
         // * the row's height itself gets scaled so that it can fit the re-scaled
         //   images (after the remaining width distrubition)
+        // * in case the images wouldn't fill a whole row, they are hidden instead
+        //   and the algorithm waits till there are more images, that way the bottom
+        //   edge of the grid is always straight line
 
         onItemAdded: {
+            // If there are items that need to wait,
+            // add them to the waiting list, decrease
+            // the ahead-waiting-counter and return
+            if (needsToWait > 0) {
+                waitingItems.push(item)
+                needsToWait--;
+                return;
+            }
             if (aheadPositions.length > 1) {
                 item.x = aheadPositions.shift() + 5;
                 item.y = currentY;
@@ -125,9 +138,17 @@ Flickable {
 
                 var innerIndex = index;
                 var keepLooking = true;
+                var hideRow = false;
 
                 while (keepLooking) {
                     var nextPhotoSize = model.sizeForIndex(++innerIndex);
+
+                    // The model does not have enough images to fill this row
+                    // so set hideRow to true and bail out
+                    if (nextPhotoSize.width === -1) {
+                        hideRow = true;
+                        break;
+                    }
                     var nextPhotoRatio = photoGrid.currentRowHeight / nextPhotoSize.height;
 
                     // Check if the next photo would fit in the current row
@@ -138,6 +159,26 @@ Flickable {
                     } else {
                         keepLooking = false;
                     }
+                }
+
+                // If there are not enough photos to fill the whole row,
+                // hide the current row until the model gives us more data
+                if (hideRow) {
+                    // Hide the current item
+                    item.visible = false;
+
+                    // How many next added items need to wait; this is a value
+                    // of how many photos the model has for the current row
+                    needsToWait = aheadPositions.length - 1;
+
+                    // Add the current item to the waiting list
+                    waitingItems.push(item);
+                    aheadPositions = [];
+
+                    // Return the next-y-position back one row so that the
+                    // next row will start where it should
+                    photoGrid.currentY -= photoGrid.currentRowHeight + 5;
+                    return;
                 }
 
                 // Now scale the row height so that the photos fill its width 100%
